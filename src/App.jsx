@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, NavLink, Route, Routes, useLocation, useNavigate, useParams } from "react-router-dom";
-import { achievements, guides, profile, tasks } from "./data";
+import { achievements, guides, profile, tasks, streakRewards } from "./data";
 import { load, save, verifyCommit, verifyLinkedIn, verifyRepo } from "./store";
 
 function useAppState() {
@@ -551,7 +551,170 @@ function Proof({label,value,set,placeholder,action,result}) { return <div classN
 
 function Progress({state}) { const percent=Math.round(state.completed.length/60*100); return <Page title="Your progress" subtitle="No work, no progress. Real work, real movement."><div className="stats"><Stat label="Completed days" value={`${state.completed.length}/60`} note="Verified submissions"/><Stat label="Progress" value={`${percent}%`} note="Persisted locally"/><Stat label="Next day" value={state.completed.length<60?state.completed.length+1:60} note="Keep building"/></div><div className="calendar card">{tasks.map(t=><Link key={t.day} to={`/day/${t.day}`} className={state.completed.includes(t.day)?"calendar-day done":"calendar-day"}><small>{t.day}</small><span>{state.completed.includes(t.day)?"✓":"○"}</span></Link>)}</div></Page>; }
 
-function Achievements({state}) { const unlocked=achievements.filter(a=>state.completed.length>=a.day).length; return <Page title="Achievements" subtitle="Unlocks are earned by completed challenge work."><div className="achievement-head"><div><span className="tag">EARNED</span><h2>{unlocked}/4</h2></div><p>Badges cannot be unlocked by simply pressing a button.</p></div><div className="achievement-grid">{achievements.map(a=>{const ok=state.completed.length>=a.day;return <article className={ok?"achievement unlocked":"achievement locked"} key={a.id}><div className="badge">{ok?"◆":"🔒"}</div><div><h3>{a.title}</h3><p>{a.detail}</p><small>{ok?"Unlocked":"Complete Day "+a.day}</small></div></article>})}</div></Page>; }
+function Achievements({ state }) {
+  const completedDays = [...state.completed]
+    .map(Number)
+    .sort((a, b) => a - b);
+
+  let longestStreak = 0;
+  let currentStreak = 0;
+
+  if (completedDays.length > 0) {
+    let streak = 1;
+    longestStreak = 1;
+
+    for (let i = 1; i < completedDays.length; i++) {
+      if (completedDays[i] === completedDays[i - 1] + 1) {
+        streak++;
+      } else {
+        streak = 1;
+      }
+
+      longestStreak = Math.max(longestStreak, streak);
+    }
+
+    currentStreak = 1;
+
+    for (let i = completedDays.length - 1; i > 0; i--) {
+      if (completedDays[i] === completedDays[i - 1] + 1) {
+        currentStreak++;
+      } else {
+        break;
+      }
+    }
+  }
+
+  const unlockedRewards = streakRewards.filter(
+    reward => longestStreak >= reward.streak
+  );
+
+  return (
+    <Page
+      title="Achievements"
+      subtitle="Build your streak. Earn your medals."
+    >
+      <section className="reward-header card">
+        <div>
+          <span className="tag">STREAK REWARDS</span>
+          <h2>{currentStreak} DAY STREAK</h2>
+          <p>
+            Keep completing consecutive challenges to unlock the next medal.
+          </p>
+        </div>
+
+        <div className="reward-progress">
+          <strong>{longestStreak}</strong>
+          <span>Best streak</span>
+        </div>
+      </section>
+
+      <section className="reward-grid">
+        {streakRewards.map(reward => {
+          const unlocked = longestStreak >= reward.streak;
+
+          return (
+            <article
+              key={reward.id}
+              className={
+                unlocked
+                  ? "streak-medal unlocked"
+                  : "streak-medal locked"
+              }
+            >
+              <div className="medal-stage">
+                <div className="medal-ribbon">
+                  <span />
+                  <span />
+                </div>
+
+                <div className={`medal medal-${reward.id}`}>
+                  <div className="medal-inner">
+                    {reward.id === "bronze" && "B"}
+                    {reward.id === "silver" && "S"}
+                    {reward.id === "gold" && "G"}
+                    {reward.id === "platinum" && "P"}
+                    {reward.id === "diamond" && "D"}
+                  </div>
+                </div>
+
+                {!unlocked && (
+                  <div className="medal-lock">
+                    🔒
+                  </div>
+                )}
+              </div>
+
+              <div className="medal-info">
+                <span className="medal-streak">
+                  {reward.label}
+                </span>
+
+                <h3>{reward.title}</h3>
+
+                <p>{reward.description}</p>
+
+                <strong className="medal-status">
+                  {unlocked
+                    ? "✓ UNLOCKED"
+                    : `LOCKED • ${reward.streak} DAYS`}
+                </strong>
+              </div>
+            </article>
+          );
+        })}
+      </section>
+
+      <section className="achievement-section">
+        <div className="achievement-head">
+          <div>
+            <span className="tag">CHALLENGE BADGES</span>
+            <h2>
+              {achievements.filter(
+                a => state.completed.length >= a.day
+              ).length}
+              /{achievements.length}
+            </h2>
+            <p>
+              Complete challenge milestones to unlock badges.
+            </p>
+          </div>
+        </div>
+
+        <div className="achievement-grid">
+          {achievements.map(a => {
+            const ok = state.completed.length >= a.day;
+
+            return (
+              <article
+                className={
+                  ok
+                    ? "achievement unlocked"
+                    : "achievement locked"
+                }
+                key={a.id}
+              >
+                <div className="badge">
+                  {ok ? "◆" : "🔒"}
+                </div>
+
+                <div>
+                  <h3>{a.title}</h3>
+                  <p>{a.detail}</p>
+
+                  <small>
+                    {ok
+                      ? "Unlocked"
+                      : `Complete Day ${a.day}`}
+                  </small>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+    </Page>
+  );
+}
 
 function Learn() { const [open,setOpen]=useState(null); return <Page title="Learn & build" subtitle="Short, actionable lessons connected to the challenge."><div className="learn-grid">{guides.map((g,i)=><article className="learn-card card" key={g.title} onClick={()=>setOpen(open===i?null:i)}><span className="tag">LESSON {i+1}</span><h2>{g.title}</h2><p>{open===i?g.body:"Tap to open the explanation and practical flow."}</p><div className="mini-flow"><span>Learn</span><i>→</i><span>Build</span><i>→</i><span>Prove</span></div></article>)}</div></Page>; }
 

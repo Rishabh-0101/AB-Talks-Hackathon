@@ -531,3 +531,41 @@ export const guides = [
       "A missed day does not invent progress. Complete the available mission before marking the day complete."
   }
 ];
+
+export const streakRewards = [
+  {
+    id: "bronze",
+    title: "Bronze Medal",
+    streak: 5,
+    label: "5 DAY STREAK",
+    description: "Complete 5 consecutive challenge days."
+  },
+  {
+    id: "silver",
+    title: "Silver Medal",
+    streak: 12,
+    label: "12 DAY STREAK",
+    description: "Complete 12 consecutive challenge days."
+  },
+  {
+    id: "gold",
+    title: "Gold Medal",
+    streak: 30,
+    label: "30 DAY STREAK",
+    description: "Complete 30 consecutive challenge days."
+  },
+  {
+    id: "platinum",
+    title: "Platinum Medal",
+    streak: 45,
+    label: "45 DAY STREAK",
+    description: "Complete 45 consecutive challenge days."
+  },
+  {
+    id: "diamond",
+    title: "Diamond Medal",
+    streak: 60,
+    label: "60 DAY STREAK",
+    description: "Complete all 60 consecutive challenge days."
+  }
+];

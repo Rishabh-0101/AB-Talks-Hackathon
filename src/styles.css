@@ -1207,3 +1207,351 @@ footer {
     padding: 12px;
   }
 }
+
+/* =========================================
+   STREAK MEDAL REWARDS
+   ========================================= */
+
+.reward-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.reward-header h2 {
+  margin: 8px 0 5px;
+  font-size: 32px;
+}
+
+.reward-header p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.reward-progress {
+  min-width: 120px;
+  text-align: center;
+  padding: 15px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(15, 18, 27, .7);
+}
+
+.reward-progress strong {
+  display: block;
+  font-size: 32px;
+}
+
+.reward-progress span {
+  color: var(--muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+
+/* Medal grid */
+
+.reward-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 15px;
+  margin-bottom: 35px;
+}
+
+.streak-medal {
+  position: relative;
+  overflow: hidden;
+  min-height: 330px;
+  padding: 20px 15px;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  background: rgba(15, 18, 27, .75);
+  text-align: center;
+  transition: .25s ease;
+}
+
+.streak-medal:hover {
+  transform: translateY(-4px);
+}
+
+
+/* Locked state */
+
+.streak-medal.locked {
+  opacity: .48;
+  filter: grayscale(.7);
+}
+
+.streak-medal.locked:hover {
+  transform: none;
+}
+
+
+/* Medal area */
+
+.medal-stage {
+  position: relative;
+  width: 150px;
+  height: 175px;
+  margin: 0 auto 10px;
+}
+
+
+/* Ribbon */
+
+.medal-ribbon {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 4px;
+  z-index: 1;
+}
+
+.medal-ribbon span {
+  width: 25px;
+  height: 58px;
+  display: block;
+  background: #272b37;
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 85%,
+    50% 70%,
+    0 85%
+  );
+}
+
+
+/* Medal circle */
+
+.medal {
+  position: absolute;
+  width: 112px;
+  height: 112px;
+  left: 50%;
+  top: 42px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 7px solid rgba(255,255,255,.16);
+  box-shadow:
+    0 12px 30px rgba(0,0,0,.4),
+    inset 0 0 20px rgba(255,255,255,.12);
+}
+
+.medal-inner {
+  width: 78px;
+  height: 78px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,.3);
+  font-size: 28px;
+  font-weight: 950;
+}
+
+
+/* Bronze */
+
+.medal-bronze {
+  background:
+    radial-gradient(circle at 30% 25%, #e0a36b, #8b451f 65%, #54280f);
+}
+
+.medal-bronze .medal-inner {
+  background: rgba(83, 39, 14, .45);
+}
+
+
+/* Silver */
+
+.medal-silver {
+  background:
+    radial-gradient(circle at 30% 25%, #ffffff, #aeb7c4 55%, #687180);
+}
+
+.medal-silver .medal-inner {
+  background: rgba(80, 88, 101, .35);
+}
+
+
+/* Gold */
+
+.medal-gold {
+  background:
+    radial-gradient(circle at 30% 25%, #fff3a6, #e5a928 55%, #8c5d05);
+}
+
+.medal-gold .medal-inner {
+  background: rgba(126, 80, 0, .35);
+}
+
+
+/* Platinum */
+
+.medal-platinum {
+  background:
+    linear-gradient(
+      145deg,
+      #f5f7fa,
+      #b8c2cc,
+      #eef2f5,
+      #7e8994
+    );
+}
+
+.medal-platinum .medal-inner {
+  background: rgba(83, 94, 106, .3);
+}
+
+
+/* Diamond */
+
+.medal-diamond {
+  background:
+    radial-gradient(
+      circle at 30% 25%,
+      #eaffff,
+      #72d9e8 45%,
+      #3c7bd9 75%,
+      #172e67
+    );
+  box-shadow:
+    0 0 25px rgba(94,231,223,.35),
+    0 15px 40px rgba(0,0,0,.45);
+}
+
+.medal-diamond .medal-inner {
+  background: rgba(30, 80, 130, .35);
+}
+
+
+/* Lock */
+
+.medal-lock {
+  position: absolute;
+  right: 4px;
+  bottom: 12px;
+  width: 35px;
+  height: 35px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(5,7,12,.92);
+  border: 1px solid rgba(255,255,255,.12);
+  font-size: 15px;
+}
+
+
+/* Medal text */
+
+.medal-info {
+  position: relative;
+  z-index: 2;
+}
+
+.medal-streak {
+  display: inline-block;
+  color: #a78bfa;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .12em;
+}
+
+.medal-info h3 {
+  margin: 6px 0 4px;
+  font-size: 18px;
+}
+
+.medal-info p {
+  margin: 0 auto 12px;
+  color: var(--muted);
+  font-size: 12px;
+  max-width: 190px;
+}
+
+.medal-status {
+  display: inline-block;
+  font-size: 10px;
+  letter-spacing: .08em;
+  color: #777f91;
+}
+
+.streak-medal.unlocked .medal-status {
+  color: #5ee7df;
+}
+
+
+/* Unlock glow */
+
+.streak-medal.unlocked .medal {
+  animation: medalGlow 3s ease-in-out infinite;
+}
+
+@keyframes medalGlow {
+  0%,
+  100% {
+    transform: translateX(-50%) scale(1);
+  }
+
+  50% {
+    transform: translateX(-50%) scale(1.035);
+  }
+}
+
+
+/* Existing achievements section */
+
+.achievement-section {
+  margin-top: 20px;
+}
+
+.achievement-section .achievement-head {
+  padding: 10px 0 20px;
+}
+
+
+/* Tablet */
+
+@media (max-width: 1100px) {
+  .reward-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+
+/* Mobile */
+
+@media (max-width: 700px) {
+  .reward-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .reward-progress {
+    width: 100%;
+  }
+
+  .reward-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+
+/* Small mobile */
+
+@media (max-width: 450px) {
+  .reward-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .streak-medal {
+    min-height: 320px;
+  }
+}
