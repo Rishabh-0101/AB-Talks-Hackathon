@@ -154,32 +154,397 @@ function ProgressRing({percent}) { return <article className="card ring-card"><d
 
 function DayStrip({state}) { return <div className="day-strip">{tasks.slice(0,14).map(t=><Link key={t.day} to={`/day/${t.day}`} className={state.completed.includes(t.day) ? "day-chip done" : t.day === 12 ? "day-chip current" : "day-chip"}><small>DAY</small><b>{t.day}</b><span>{state.completed.includes(t.day) ? "✓" : t.day === 12 ? "→" : "·"}</span></Link>)}</div>; }
 
-function Day({state,setState}) {
-  const {day} = useParams();
-  const d = tasks[Number(day)-1];
+function Day({ state, setState }) {
+  const { day } = useParams();
+  const dayNumber = Number(day);
+  const d = tasks[dayNumber - 1];
+
   const old = state.proofs[day] || {};
-  const [repo,setRepo] = useState(old.repo||"");
-  const [commit,setCommit] = useState(old.commit||"");
-  const [li,setLi] = useState(old.li||"");
-  const [r,setR] = useState(null), [c,setC] = useState(null), [l,setL] = useState(null);
-  const pass = [r,c,l].filter(x=>x?.ok).length;
-  if(!d) return <Page title="Day not found"><article className="card">This challenge day does not exist.</article></Page>;
-  async function submit() {
-    if(pass<3) return;
-    const next={...state,proofs:{...state.proofs,[day]:{repo,commit,li,verifiedAt:new Date().toISOString()}},completed:Array.from(new Set([...state.completed,Number(day)]))};
+
+  const [repo, setRepo] = useState(old.repo || "");
+  const [commit, setCommit] = useState(old.commit || "");
+  const [li, setLi] = useState(old.li || "");
+
+  const [r, setR] = useState(null);
+  const [c, setC] = useState(null);
+  const [l, setL] = useState(null);
+
+  const [answers, setAnswers] = useState(old.answers || {});
+  const [quizSubmitted, setQuizSubmitted] = useState(
+    old.quizSubmitted || false
+  );
+
+  if (!d) {
+    return (
+      <Page title="Day not found">
+        <article className="card">
+          This challenge day does not exist.
+        </article>
+      </Page>
+    );
+  }
+
+  const isProofDay = d.type === "proof";
+
+  const correctAnswers = d.questions
+    ? d.questions.filter(
+        (question, index) => answers[index] === question.answer
+      ).length
+    : 0;
+
+  const quizPassed =
+    d.questions &&
+    d.questions.length > 0 &&
+    correctAnswers === d.questions.length;
+
+  const proofPassed = [r, c, l].filter(x => x?.ok).length === 3;
+
+  const completed = state.completed.includes(dayNumber);
+
+  function selectAnswer(questionIndex, answerIndex) {
+    if (completed) return;
+
+    setAnswers(prev => ({
+      ...prev,
+      [questionIndex]: answerIndex
+    }));
+
+    setQuizSubmitted(false);
+  }
+
+  function completeQuiz() {
+    if (!quizPassed) {
+      setQuizSubmitted(true);
+      return;
+    }
+
+    const next = {
+      ...state,
+
+      proofs: {
+        ...state.proofs,
+        [day]: {
+          ...old,
+          answers,
+          quizSubmitted: true,
+          verifiedAt: new Date().toISOString()
+        }
+      },
+
+      completed: Array.from(
+        new Set([...state.completed, dayNumber])
+      )
+    };
+
+    setState(next);
+    setQuizSubmitted(true);
+  }
+
+  function submitProof() {
+    if (!proofPassed) return;
+
+    const next = {
+      ...state,
+
+      proofs: {
+        ...state.proofs,
+        [day]: {
+          repo,
+          commit,
+          li,
+          verifiedAt: new Date().toISOString()
+        }
+      },
+
+      completed: Array.from(
+        new Set([...state.completed, dayNumber])
+      )
+    };
+
     setState(next);
   }
-  return <Page title={`Day ${day}`} subtitle="Real evidence only. Complete the work, verify the proof, then submit.">
-    <div className="day-hero card"><span className="tag">REAL EVIDENCE</span><h1>{d.title}</h1><p>{d.description}</p><div className="deliverables">{d.deliverables.map((x,i)=><div key={i}>✓ <span>{x}</span></div>)}</div></div>
-    <div className="proof-layout"><article className="card proof-card"><div className="section-title"><div><h2>Submit proof of work</h2><p>All 3 checks must pass.</p></div><b className="counter">{pass}/3</b></div>
-      <Proof label="GitHub repository" value={repo} set={setRepo} placeholder="https://github.com/owner/repository" action={async()=>setR(await verifyRepo(repo))} result={r}/>
-      <Proof label="GitHub commit" value={commit} set={setCommit} placeholder="https://github.com/owner/repo/commit/abc123" action={async()=>setC(await verifyCommit(commit,repo))} result={c}/>
-      <Proof label="LinkedIn post" value={li} set={setLi} placeholder="https://www.linkedin.com/posts/..." action={()=>setL(verifyLinkedIn(li))} result={l}/>
-      <div className="notice">ⓘ GitHub domain and repository/commit structure are checked in this demo. LinkedIn ownership needs a production backend/OAuth integration.</div>
-      <button className="btn primary full" disabled={pass<3} onClick={submit}>{state.completed.includes(Number(day)) ? "✓ Day completed" : "Submit verified proof"}</button>
-    </article>
-    <article className="card side-guide"><span className="tag">DAY FLOW</span><div className="flow"><span>Read mission</span><i>↓</i><span>Build</span><i>↓</i><span>Commit</span><i>↓</i><span>Share</span><i>↓</i><b>Verified day</b></div></article></div>
-  </Page>;
+
+  return (
+    <Page
+      title={`Day ${day}`}
+      subtitle={
+        isProofDay
+          ? "Complete the work, verify the proof, then submit."
+          : "Complete today's challenge and pass all questions."
+      }
+    >
+
+      <div className="day-hero card">
+        <span className="tag">
+          {isProofDay ? "REAL EVIDENCE" : "DAILY CHALLENGE"}
+        </span>
+
+        <h1>{d.title}</h1>
+
+        <p>{d.description}</p>
+
+        <div className="deliverables">
+          {d.deliverables.map((item, index) => (
+            <div key={index}>
+              ✓ <span>{item}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+
+      {isProofDay ? (
+
+        <div className="proof-layout">
+
+          <article className="card proof-card">
+
+            <div className="section-title">
+              <div>
+                <h2>Submit proof of work</h2>
+                <p>All 3 checks must pass.</p>
+              </div>
+
+              <b className="counter">
+                {[r, c, l].filter(x => x?.ok).length}/3
+              </b>
+            </div>
+
+
+            <Proof
+              label="GitHub repository"
+              value={repo}
+              set={setRepo}
+              placeholder="https://github.com/owner/repository"
+              action={async () =>
+                setR(await verifyRepo(repo))
+              }
+              result={r}
+            />
+
+
+            <Proof
+              label="GitHub commit"
+              value={commit}
+              set={setCommit}
+              placeholder="https://github.com/owner/repo/commit/abc123"
+              action={async () =>
+                setC(await verifyCommit(commit, repo))
+              }
+              result={c}
+            />
+
+
+            <Proof
+              label="LinkedIn post"
+              value={li}
+              set={setLi}
+              placeholder="https://www.linkedin.com/posts/..."
+              action={() =>
+                setL(verifyLinkedIn(li))
+              }
+              result={l}
+            />
+
+
+            <div className="notice">
+              ⓘ GitHub repository and commit URLs are checked by the
+              demo verifier. LinkedIn ownership requires a production
+              backend/OAuth integration.
+            </div>
+
+
+            <button
+              className="btn primary full"
+              disabled={!proofPassed}
+              onClick={submitProof}
+            >
+              {completed
+                ? "✓ Day completed"
+                : "Submit verified proof"}
+            </button>
+
+          </article>
+
+
+          <article className="card side-guide">
+
+            <span className="tag">
+              DAY FLOW
+            </span>
+
+            <div className="flow">
+              <span>Read mission</span>
+              <i>↓</i>
+
+              <span>Build</span>
+              <i>↓</i>
+
+              <span>Commit</span>
+              <i>↓</i>
+
+              <span>Share</span>
+              <i>↓</i>
+
+              <b>Verified day</b>
+            </div>
+
+          </article>
+
+        </div>
+
+      ) : (
+
+        <article className="card quiz-card">
+
+          <div className="section-title">
+
+            <div>
+              <span className="tag">
+                KNOWLEDGE CHECK
+              </span>
+
+              <h2>Today's questions</h2>
+
+              <p>
+                Answer all questions correctly to complete this day.
+              </p>
+            </div>
+
+            <b className="counter">
+              {correctAnswers}/{d.questions.length}
+            </b>
+
+          </div>
+
+
+          <div className="quiz-list">
+
+            {d.questions.map((question, questionIndex) => (
+
+              <div
+                className="quiz-question"
+                key={questionIndex}
+              >
+
+                <h3>
+                  {questionIndex + 1}. {question.question}
+                </h3>
+
+
+                <div className="quiz-options">
+
+                  {question.options.map(
+                    (option, optionIndex) => {
+
+                      const selected =
+                        answers[questionIndex] ===
+                        optionIndex;
+
+                      const showCorrect =
+                        quizSubmitted &&
+                        optionIndex ===
+                        question.answer;
+
+                      const showWrong =
+                        quizSubmitted &&
+                        selected &&
+                        optionIndex !==
+                        question.answer;
+
+                      let className =
+                        "quiz-option";
+
+                      if (selected) {
+                        className += " selected";
+                      }
+
+                      if (showCorrect) {
+                        className += " correct";
+                      }
+
+                      if (showWrong) {
+                        className += " wrong";
+                      }
+
+                      return (
+                        <button
+                          type="button"
+                          key={optionIndex}
+                          className={className}
+                          disabled={completed}
+                          onClick={() =>
+                            selectAnswer(
+                              questionIndex,
+                              optionIndex
+                            )
+                          }
+                        >
+                          <span>
+                            {String.fromCharCode(
+                              65 + optionIndex
+                            )}
+                          </span>
+
+                          {option}
+                        </button>
+                      );
+                    }
+                  )}
+
+                </div>
+
+              </div>
+
+            ))}
+
+          </div>
+
+
+          {quizSubmitted && !quizPassed && (
+
+            <div className="result bad">
+              ! Some answers are incorrect.
+              Review the questions and try again.
+            </div>
+
+          )}
+
+
+          {quizPassed && !completed && (
+
+            <div className="result ok">
+              ✓ All answers are correct. You can complete this day.
+            </div>
+
+          )}
+
+
+          {completed && (
+
+            <div className="result ok">
+              ✓ Day {day} has already been completed.
+            </div>
+
+          )}
+
+
+          <button
+            className="btn primary full"
+            disabled={!quizPassed || completed}
+            onClick={completeQuiz}
+          >
+            {completed
+              ? "✓ Day completed"
+              : "Complete today's challenge"}
+          </button>
+
+        </article>
+
+      )}
+
+    </Page>
+  );
 }
 
 function Proof({label,value,set,placeholder,action,result}) { return <div className="proof"><label>{label}</label><div className="input-row"><input value={value} onChange={e=>set(e.target.value)} placeholder={placeholder}/><button className="btn secondary" onClick={action}>Verify</button></div>{result&&<div className={result.ok?"result ok":"result bad"}>{result.ok?"✓":"!"} {result.msg}</div>}</div>; }
