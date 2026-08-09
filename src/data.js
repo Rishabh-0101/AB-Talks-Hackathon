@@ -137,7 +137,8 @@ const challengeData = [
         answer: 0
       },
       {
-        question: "Where should sensitive API secrets normally be stored?",
+        question:
+          "Where should sensitive API secrets normally be stored?",
         options: [
           "Public React components",
           "README.md",
@@ -272,7 +273,8 @@ const challengeData = [
         answer: 0
       },
       {
-        question: "What should you do when feedback reveals a problem?",
+        question:
+          "What should you do when feedback reveals a problem?",
         options: [
           "Improve the product",
           "Ignore it automatically",
@@ -426,62 +428,578 @@ const challengeData = [
 ];
 
 /*
-  Keep the remaining days usable.
-  They can be expanded later with their own challenge objects.
+  Days 11–20
 */
-export const tasks = Array.from({ length: 60 }, (_, index) => {
-  const day = index + 1;
-  const existing = challengeData.find(item => item.day === day);
+export const tasks = [
+  ...challengeData,
 
-  if (existing) {
-    return existing;
-  }
-
-  return {
-    day,
-    title: `Build Challenge Project ${day}`,
-    description: `Complete the Day ${day} development mission.`,
+  {
+    day: 11,
+    title: "Create the project MVP",
+    description:
+      "Build the smallest working version of your hackathon solution.",
     type: "quiz",
     questions: [
       {
-        question: `What is the main goal of Day ${day}?`,
+        question: "What should an MVP contain?",
         options: [
-          "Complete the assigned development mission",
-          "Skip the project",
-          "Delete the repository",
-          "Ignore the task"
+          "Only the core value of the product",
+          "Every possible feature",
+          "Only animations",
+          "Only documentation"
         ],
         answer: 0
       },
       {
-        question: "What should you do after making a change?",
+        question: "What should you prioritize first?",
         options: [
-          "Test the change",
-          "Ignore it",
-          "Delete the project",
-          "Stop development"
+          "Core user workflow",
+          "Extra settings",
+          "Decorative animations",
+          "Admin dashboard"
         ],
         answer: 0
       },
       {
-        question: "What should progress represent?",
+        question: "What should happen after building the MVP?",
         options: [
-          "Actual completed work",
-          "Random button clicks",
-          "Page refreshes",
-          "Time spent on the homepage"
+          "Test the complete user flow",
+          "Stop development",
+          "Delete the prototype",
+          "Add random features"
         ],
         answer: 0
       }
     ],
     deliverables: [
-      `Complete the Day ${day} mission.`,
-      "Test your work.",
-      "Record meaningful progress."
+      "Build the first working MVP.",
+      "Complete the main user flow.",
+      "Test the MVP."
     ]
-  };
-});
+  },
 
+  {
+    day: 12,
+    title: "Build the main user flow",
+    description:
+      "Make the primary journey from user input to useful result work correctly.",
+    type: "quiz",
+    questions: [
+      {
+        question: "What is the main user flow?",
+        options: [
+          "The steps a user follows to achieve the main goal",
+          "The CSS structure",
+          "The Git history",
+          "The project folder structure"
+        ],
+        answer: 0
+      },
+      {
+        question: "What should you remove from the main flow?",
+        options: [
+          "Unnecessary steps",
+          "Important actions",
+          "User feedback",
+          "Validation"
+        ],
+        answer: 0
+      },
+      {
+        question: "What should you test?",
+        options: [
+          "The complete user journey",
+          "Only the homepage",
+          "Only the footer",
+          "Only the logo"
+        ],
+        answer: 0
+      }
+    ],
+    deliverables: [
+      "Complete the main user journey.",
+      "Remove unnecessary friction.",
+      "Test the complete flow."
+    ]
+  },
+
+  {
+    day: 13,
+    title: "Connect the frontend and backend",
+    description:
+      "Connect your user interface with the backend or service layer.",
+    type: "quiz",
+    questions: [
+      {
+        question: "Why connect frontend and backend?",
+        options: [
+          "To exchange application data",
+          "To change colors",
+          "To create animations",
+          "To rename files"
+        ],
+        answer: 0
+      },
+      {
+        question: "What should an API response contain?",
+        options: [
+          "Useful data or an appropriate error",
+          "Random HTML",
+          "CSS only",
+          "Git commands"
+        ],
+        answer: 0
+      },
+      {
+        question: "What should happen when an API fails?",
+        options: [
+          "Show a useful error state",
+          "Crash silently",
+          "Delete the data",
+          "Refresh forever"
+        ],
+        answer: 0
+      }
+    ],
+    deliverables: [
+      "Connect the required API or backend.",
+      "Handle successful responses.",
+      "Handle API errors."
+    ]
+  },
+
+  {
+    day: 14,
+    title: "Design the data flow",
+    description:
+      "Define how information moves through your application.",
+    type: "quiz",
+    questions: [
+      {
+        question: "What does data flow describe?",
+        options: [
+          "How information moves through the system",
+          "Only page colors",
+          "Only Git commits",
+          "Only typography"
+        ],
+        answer: 0
+      },
+      {
+        question: "Why should data flow be clear?",
+        options: [
+          "It makes the system easier to understand and debug",
+          "It increases CSS size",
+          "It removes testing",
+          "It hides errors"
+        ],
+        answer: 0
+      },
+      {
+        question: "What should you avoid?",
+        options: [
+          "Unnecessary duplicated state",
+          "Clear data ownership",
+          "Validation",
+          "Error handling"
+        ],
+        answer: 0
+      }
+    ],
+    deliverables: [
+      "Document the main data flow.",
+      "Remove unnecessary duplicated state.",
+      "Test data movement."
+    ]
+  },
+
+  {
+    day: 15,
+    title: "Add validation",
+    description:
+      "Validate important user inputs before processing them.",
+    type: "quiz",
+    questions: [
+      {
+        question: "Why validate user input?",
+        options: [
+          "To prevent invalid data from entering the system",
+          "To make forms longer",
+          "To remove the backend",
+          "To improve animations"
+        ],
+        answer: 0
+      },
+      {
+        question: "Where should important validation happen?",
+        options: [
+          "At appropriate frontend and backend boundaries",
+          "Only in CSS",
+          "Only in comments",
+          "Nowhere"
+        ],
+        answer: 0
+      },
+      {
+        question: "What should invalid input produce?",
+        options: [
+          "A clear error message",
+          "A blank screen",
+          "Silent failure",
+          "Random data"
+        ],
+        answer: 0
+      }
+    ],
+    deliverables: [
+      "Validate important inputs.",
+      "Show clear validation messages.",
+      "Test invalid input cases."
+    ]
+  },
+
+  {
+    day: 16,
+    title: "Improve error handling",
+    description:
+      "Make failures understandable instead of leaving users with broken screens.",
+    type: "quiz",
+    questions: [
+      {
+        question: "What should a good error state provide?",
+        options: [
+          "A clear explanation and possible next action",
+          "Only a red screen",
+          "No information",
+          "A random message"
+        ],
+        answer: 0
+      },
+      {
+        question: "What should happen when a request fails?",
+        options: [
+          "Handle the failure gracefully",
+          "Ignore it",
+          "Delete the application",
+          "Freeze the page"
+        ],
+        answer: 0
+      },
+      {
+        question: "Why is error handling important in a demo?",
+        options: [
+          "It makes the product more reliable",
+          "It removes the need for a UI",
+          "It increases animations",
+          "It hides the problem"
+        ],
+        answer: 0
+      }
+    ],
+    deliverables: [
+      "Add useful error states.",
+      "Handle failed requests.",
+      "Test failure scenarios."
+    ]
+  },
+
+  {
+    day: 17,
+    title: "Improve loading states",
+    description:
+      "Make asynchronous operations understandable to users.",
+    type: "quiz",
+    questions: [
+      {
+        question: "Why use a loading state?",
+        options: [
+          "To tell the user that work is in progress",
+          "To hide errors",
+          "To increase bundle size",
+          "To replace the API"
+        ],
+        answer: 0
+      },
+      {
+        question: "What should happen after loading finishes?",
+        options: [
+          "Show the result or an error",
+          "Keep loading forever",
+          "Delete the result",
+          "Refresh automatically"
+        ],
+        answer: 0
+      },
+      {
+        question: "What should you avoid?",
+        options: [
+          "Confusing infinite loading",
+          "Clear feedback",
+          "Error handling",
+          "User feedback"
+        ],
+        answer: 0
+      }
+    ],
+    deliverables: [
+      "Add loading feedback.",
+      "Handle success and failure.",
+      "Test slow and failed requests."
+    ]
+  },
+
+  {
+    day: 18,
+    title: "Improve responsive design",
+    description:
+      "Make the main experience usable on mobile, tablet and desktop.",
+    type: "quiz",
+    questions: [
+      {
+        question: "Why is responsive design important?",
+        options: [
+          "Users have different screen sizes",
+          "It removes backend work",
+          "It replaces testing",
+          "It increases Git commits"
+        ],
+        answer: 0
+      },
+      {
+        question: "What should you test?",
+        options: [
+          "Main screens at multiple widths",
+          "Only desktop",
+          "Only one phone",
+          "Only the footer"
+        ],
+        answer: 0
+      },
+      {
+        question: "What is a common responsive problem?",
+        options: [
+          "Overflow and unreadable layouts",
+          "Good spacing",
+          "Clear navigation",
+          "Accessible buttons"
+        ],
+        answer: 0
+      }
+    ],
+    deliverables: [
+      "Test mobile layout.",
+      "Test desktop layout.",
+      "Fix overflow and spacing issues."
+    ]
+  },
+
+  {
+    day: 19,
+    title: "Improve accessibility",
+    description:
+      "Make the important parts of the application easier for more users to operate.",
+    type: "quiz",
+    questions: [
+      {
+        question: "Why is accessibility important?",
+        options: [
+          "More people can use the product",
+          "It makes code longer",
+          "It removes testing",
+          "It only helps developers"
+        ],
+        answer: 0
+      },
+      {
+        question: "What should interactive elements have?",
+        options: [
+          "Clear labels and understandable actions",
+          "Random icons",
+          "Hidden text",
+          "No keyboard support"
+        ],
+        answer: 0
+      },
+      {
+        question: "What should you check?",
+        options: [
+          "Keyboard navigation and readable contrast",
+          "Only animations",
+          "Only gradients",
+          "Only images"
+        ],
+        answer: 0
+      }
+    ],
+    deliverables: [
+      "Review interactive elements.",
+      "Improve labels and focus states.",
+      "Check keyboard usability."
+    ]
+  },
+
+  {
+    day: 20,
+    title: "Create the project dashboard",
+    description:
+      "Show the most important project information in one clear place.",
+    type: "quiz",
+    questions: [
+      {
+        question: "What should a useful dashboard show?",
+        options: [
+          "Important information and actions",
+          "Every possible piece of data",
+          "Only decoration",
+          "Only the project logo"
+        ],
+        answer: 0
+      },
+      {
+        question: "What should receive visual priority?",
+        options: [
+          "The most important information",
+          "Random statistics",
+          "Footer links",
+          "Unused features"
+        ],
+        answer: 0
+      },
+      {
+        question: "What should you avoid?",
+        options: [
+          "Information overload",
+          "Clear hierarchy",
+          "Useful metrics",
+          "Simple navigation"
+        ],
+        answer: 0
+      }
+    ],
+    deliverables: [
+      "Build the main dashboard.",
+      "Show useful project information.",
+      "Improve information hierarchy."
+    ]
+  },
+
+  /*
+    Days 21–60
+
+    IMPORTANT:
+    There must be exactly 40 missions here because:
+    21 → 60 = 40 days.
+  */
+  ...Array.from({ length: 40 }, (_, index) => {
+    const day = index + 21;
+
+    const missions = [
+      "Refine the core feature",
+      "Improve API integration",
+      "Improve database handling",
+      "Add useful user feedback",
+      "Improve application performance",
+      "Review security",
+      "Improve authentication flow",
+      "Improve authorization rules",
+      "Clean up project structure",
+      "Refactor duplicated code",
+      "Improve form experience",
+      "Improve empty states",
+      "Improve mobile experience",
+      "Add meaningful analytics",
+      "Improve project documentation",
+      "Write API documentation",
+      "Improve README",
+      "Add screenshots to documentation",
+      "Prepare project architecture diagram",
+      "Create system workflow documentation",
+      "Test edge cases",
+      "Fix critical bugs",
+      "Review API failures",
+      "Review data validation",
+      "Review user permissions",
+      "Improve deployment configuration",
+      "Check production environment variables",
+      "Optimize important pages",
+      "Review browser compatibility",
+      "Improve UI consistency",
+      "Improve navigation",
+      "Improve onboarding",
+      "Prepare demo data",
+      "Create final demo workflow",
+      "Record the main product flow",
+      "Prepare judge presentation",
+      "Prepare problem-solution explanation",
+      "Prepare technical explanation",
+      "Final project testing",
+      "Finalize and submit the project"
+    ];
+
+    /*
+      Defensive fallback:
+      Even if someone later edits the missions array incorrectly,
+      the app will not crash with:
+      "Cannot read properties of undefined (reading 'toLowerCase')"
+    */
+    const mission =
+      typeof missions[index] === "string" && missions[index].trim()
+        ? missions[index]
+        : `Complete Day ${day} project work`;
+
+    return {
+      day,
+      title: mission,
+      description: `Work on ${mission.toLowerCase()} for your hackathon project and record meaningful progress.`,
+      type: "quiz",
+
+      questions: [
+        {
+          question: `What is the main goal of Day ${day}?`,
+          options: [
+            mission,
+            "Add random features",
+            "Ignore the project",
+            "Delete the repository"
+          ],
+          answer: 0
+        },
+
+        {
+          question: "What should you do after making the change?",
+          options: [
+            "Test the change",
+            "Ignore the result",
+            "Delete the feature",
+            "Stop development"
+          ],
+          answer: 0
+        },
+
+        {
+          question: "What should your progress represent?",
+          options: [
+            "Actual work completed on the project",
+            "Page refreshes",
+            "Random clicks",
+            "Time spent on the homepage"
+          ],
+          answer: 0
+        }
+      ],
+
+      deliverables: [
+        `Complete: ${mission}.`,
+        "Test the implementation.",
+        "Record meaningful progress."
+      ]
+    };
+  })
+];
+
+/*
+  Challenge achievements
+*/
 export const achievements = [
   {
     id: "first",
@@ -489,18 +1007,21 @@ export const achievements = [
     detail: "Complete your first verified challenge day.",
     day: 1
   },
+
   {
     id: "week",
     title: "7 Day Builder",
     detail: "Complete seven challenge days.",
     day: 7
   },
+
   {
     id: "half",
     title: "Halfway Hero",
     detail: "Complete thirty challenge days.",
     day: 30
   },
+
   {
     id: "finish",
     title: "60 Day Finisher",
@@ -509,22 +1030,28 @@ export const achievements = [
   }
 ];
 
+/*
+  Learning guides
+*/
 export const guides = [
   {
     title: "How the streak works",
     body:
       "A streak grows only when a challenge day is actually completed. Refreshing the page does not create progress."
   },
+
   {
     title: "Day 1 proof",
     body:
       "Day 1 uses the GitHub repository, GitHub commit and LinkedIn proof flow."
   },
+
   {
     title: "Daily challenges",
     body:
       "From Day 2 onward, each challenge uses its own mission and questions instead of repeating the Day 1 proof form."
   },
+
   {
     title: "Missed day",
     body:
@@ -532,6 +1059,9 @@ export const guides = [
   }
 ];
 
+/*
+  Streak rewards
+*/
 export const streakRewards = [
   {
     id: "bronze",
@@ -540,6 +1070,7 @@ export const streakRewards = [
     label: "5 DAY STREAK",
     description: "Complete 5 consecutive challenge days."
   },
+
   {
     id: "silver",
     title: "Silver Medal",
@@ -547,6 +1078,7 @@ export const streakRewards = [
     label: "12 DAY STREAK",
     description: "Complete 12 consecutive challenge days."
   },
+
   {
     id: "gold",
     title: "Gold Medal",
@@ -554,6 +1086,7 @@ export const streakRewards = [
     label: "30 DAY STREAK",
     description: "Complete 30 consecutive challenge days."
   },
+
   {
     id: "platinum",
     title: "Platinum Medal",
@@ -561,6 +1094,7 @@ export const streakRewards = [
     label: "45 DAY STREAK",
     description: "Complete 45 consecutive challenge days."
   },
+
   {
     id: "diamond",
     title: "Diamond Medal",
