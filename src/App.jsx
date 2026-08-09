@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  HashRouter,
   Link,
   NavLink,
   Navigate,
@@ -27,8 +26,7 @@ import {
   verifyRepo,
 } from "./store";
 
-import { getProfile } from "./api";
-
+import { getProfile, getStats } from "./api";
 /* =========================================================
 APP STATE
 ========================================================= */
@@ -64,28 +62,28 @@ function App() {
   const [state, setState] = useAppState();
 
   return (
-    <>
-    <HashRouter>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            state.signedIn ? (
-              <Navigate to="/dashboard" replace />
-            ) : (
-              <Landing state={state} setState={setState} />
-            )
-          }
-        />
+    <Routes>
+      <Route
+        path="/"
+        element={
+          state.signedIn ? (
+            <Navigate to="/dashboard" replace />
+          ) : (
+            <Landing state={state} setState={setState} />
+          )
+        }
+      />
 
-        <Route
-          path="/*"
-          element={<Shell state={state} setState={setState} />}
-        />
-      </Routes>
-    </HashRouter>
-      
-    </>
+      <Route
+        path="/*"
+        element={
+          <Shell
+            state={state}
+            setState={setState}
+          />
+        }
+      />
+    </Routes>
   );
 }
 
