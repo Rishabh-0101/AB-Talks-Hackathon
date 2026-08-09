@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  HashRouter,
   Link,
   NavLink,
   Navigate,
@@ -64,6 +65,7 @@ function App() {
 
   return (
     <>
+    <HashRouter>
       <Routes>
         <Route
           path="/"
@@ -81,6 +83,8 @@ function App() {
           element={<Shell state={state} setState={setState} />}
         />
       </Routes>
+    </HashRouter>
+      
     </>
   );
 }
